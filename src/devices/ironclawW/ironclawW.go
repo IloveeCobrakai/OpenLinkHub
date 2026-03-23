@@ -317,7 +317,9 @@ func (d *Device) SetConnected(value bool) {
 
 	if d.activeRgb != nil {
 		d.activeRgb.Exit <- true
+		d.activeRgb = nil
 	}
+
 	d.Connected = value
 }
 
@@ -1029,11 +1031,16 @@ func (d *Device) setSoftwareMode() {
 
 // SetSleepMode will switch a device to sleep mode
 func (d *Device) SetSleepMode() {
-	d.SetConnected(false)
+	d.deviceLock.Lock()
+	defer d.deviceLock.Unlock()
 
-	_, err := d.transfer(cmdSleepMode, nil)
-	if err != nil {
-		logger.Log(logger.Fields{"error": err}).Error("Unable to change device mode")
+	if d.Connected {
+		d.SetConnected(false)
+
+		_, err := d.transfer(cmdSleepMode, nil)
+		if err != nil {
+			logger.Log(logger.Fields{"error": err}).Error("Unable to change device mode")
+		}
 	}
 }
 
