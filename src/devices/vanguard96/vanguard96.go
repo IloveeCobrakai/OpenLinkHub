@@ -149,7 +149,7 @@ var (
 	headerSize              = 4
 	headerWriteSize         = 4
 	maxBufferSizePerRequest = bufferSize - 3
-	colorPacketLength       = 412
+	colorPacketLength       = 413
 	keyboardKey             = "vanguard96-default"
 	defaultLayout           = "vanguard96-default-US"
 	keyAssignmentLength     = 137

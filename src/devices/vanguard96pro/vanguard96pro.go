@@ -155,7 +155,7 @@ var (
 	headerSize              = 4
 	headerWriteSize         = 4
 	maxBufferSizePerRequest = bufferSize - 3
-	colorPacketLength       = 412
+	colorPacketLength       = 413
 	keyboardKey             = "vanguard96-default"
 	defaultLayout           = "vanguard96-default-US"
 	keyAssignmentLength     = 137
@@ -977,7 +977,7 @@ func (d *Device) saveDeviceProfile() {
 		if layout == nil {
 			return
 		}
-		if d.DeviceProfile.Keyboards["default"].Version == layout.Version {
+		if d.DeviceProfile.Keyboards["default"].Version != layout.Version {
 			logger.Log(
 				logger.Fields{
 					"current":  d.DeviceProfile.Keyboards["default"].Version,
