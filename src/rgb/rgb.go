@@ -3,6 +3,7 @@ package rgb
 import (
 	"OpenLinkHub/src/common"
 	"encoding/json"
+	"math"
 	"math/rand"
 	"os"
 	"sort"
@@ -194,6 +195,42 @@ func interpolate(
 	g := g1 + fraction*(g2-g1)
 	b := b1 + fraction*(b2-b1)
 	return int(r * 255), int(g * 255), int(b * 255)
+}
+
+// wrapDistance calculates the shortest circular distance between two positions
+func wrapDistance(a, b float64) float64 {
+	d := math.Abs(a - b)
+	if d > 0.5 {
+		d = 1.0 - d
+	}
+	return d
+}
+
+// arcMask returns a smooth brightness multiplier [0.0, 1.0] for a light at the given position
+func arcMask(position, center, width float64) float64 {
+	d := wrapDistance(position, center)
+	if d >= width {
+		return 0.0
+	}
+
+	x := d / width
+	return 0.5 * (1.0 + math.Cos(math.Pi*x))
+}
+
+// lerpColor linearly interpolates between two colors by factor t
+func lerpColor(c1, c2 Color, t float64) (int, int, int) {
+	if t < 0 {
+		t = 0
+	}
+	if t > 1 {
+		t = 1
+	}
+
+	r := lerp(c1.Red, c2.Red, t)
+	g := lerp(c1.Green, c2.Green, t)
+	b := lerp(c1.Blue, c2.Blue, t)
+
+	return int(math.Round(r)), int(math.Round(g)), int(math.Round(b))
 }
 
 // New will create new ActiveRGB struct for RGB control

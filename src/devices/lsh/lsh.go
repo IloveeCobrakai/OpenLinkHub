@@ -293,6 +293,7 @@ var (
 	voltsScale                  = 1000.0
 	ampsScale                   = 100.0
 	rgbModes                    = []string{
+		"arc",
 		"circle",
 		"circleshift",
 		"colorpulse",
@@ -322,6 +323,7 @@ var (
 		"wave",
 	}
 	rgbProfileUpgrade = []string{
+		"arc",
 		"led",
 		"nebula",
 		"marquee",
@@ -4551,6 +4553,11 @@ func (d *Device) generateRgbEffect(k int, channels uint8, startTime *time.Time, 
 	case "pastelspiralrainbow":
 		{
 			r.PastelSpiralRainbow(*startTime)
+			buff = r.Output
+		}
+	case "arc":
+		{
+			r.Arc(*startTime)
 			buff = r.Output
 		}
 	case "watercolor":
