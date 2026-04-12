@@ -156,35 +156,6 @@ func startTasks() {
 		return now.After(offToday) && now.Before(onToday)
 	}
 
-	// Check if program started after Off or On time and apply values
-	timeNow := time.Now()
-	time.Sleep(time.Duration(refreshTime) * time.Millisecond) // Wait for 5 seconds
-	if isInOffRange(timeNow, scheduledTimeOff, scheduledTimeOn) {
-		mu.Lock()
-		if !scheduler.LightsOut {
-			scheduler.LightsOut = true
-			current := scheduler
-			mu.Unlock()
-
-			devices.ScheduleDeviceBrightness(0)
-			SaveSchedulerSettings(current)
-		} else {
-			mu.Unlock()
-		}
-	} else {
-		mu.Lock()
-		if scheduler.LightsOut {
-			scheduler.LightsOut = false
-			current := scheduler
-			mu.Unlock()
-
-			devices.ScheduleDeviceBrightness(1)
-			SaveSchedulerSettings(current)
-		} else {
-			mu.Unlock()
-		}
-	}
-
 	// Define the times you want the task to run
 	schedules := []Schedule{
 		{
@@ -231,6 +202,38 @@ func startTasks() {
 	mu.Unlock()
 
 	go func(t *time.Ticker, stop <-chan struct{}) {
+		// Check if we started (or settings were updated) while already inside the off
+		// range and apply the initial brightness state after a short settling delay.
+		// This runs in the goroutine so that callers (Init, UpdateRgbSettings) are
+		// not blocked for the duration of the sleep.
+		time.Sleep(time.Duration(refreshTime) * time.Millisecond)
+		timeNow := time.Now()
+		if isInOffRange(timeNow, scheduledTimeOff, scheduledTimeOn) {
+			mu.Lock()
+			if !scheduler.LightsOut {
+				scheduler.LightsOut = true
+				current := scheduler
+				mu.Unlock()
+
+				devices.ScheduleDeviceBrightness(0)
+				SaveSchedulerSettings(current)
+			} else {
+				mu.Unlock()
+			}
+		} else {
+			mu.Lock()
+			if scheduler.LightsOut {
+				scheduler.LightsOut = false
+				current := scheduler
+				mu.Unlock()
+
+				devices.ScheduleDeviceBrightness(1)
+				SaveSchedulerSettings(current)
+			} else {
+				mu.Unlock()
+			}
+		}
+
 		for {
 			select {
 			case now := <-t.C:
