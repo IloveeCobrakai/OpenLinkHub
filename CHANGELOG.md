@@ -1,5 +1,29 @@
+## 2026-04-13
+
+* xd5 / xd6 should have temperatureProbe set to true (143339c)
+
+## 2026-04-12
+
+* prevent rgb cluster controller if there is no rgb devices (a23d81a)
+* Merge pull request #398 from sjhddh/perf/precompile-regex (ff55a97)
+* perf: pre-compile repeated regexp patterns into package-level vars (f410621)
+* slipstream polling rate https://github.com/jurkovic-nikola/OpenLinkHub/issues/396 (e48c9b8)
+* fixups (8969952)
+* Merge pull request #393 from sjhddh/fix/scheduler-blocking-sleep (2881686)
+* scheduler: move initial brightness check into goroutine to avoid blocking callers (83f20bb)
+* rain rgb effect for link system hub (81d6c5f)
+* this should be DE also (7479576)
+* this should be DE also (c3c31ea)
+* k68rgb de layout https://github.com/jurkovic-nikola/OpenLinkHub/issues/392 (e6aa3bc)
+
+## 2026-04-11
+
+* missing icon (70ba03e)
+* experimental arc for link system mode (3e747a1)
+
 ## 2026-04-09
 
+* changelog (e36c2f3)
 * ironclaw se wireless (1e350b0)
 
 ## 2026-04-08
