@@ -3088,7 +3088,7 @@ func (d *Device) updateDeviceSpeed() {
 						{
 							temp = d.getPSUTemperature()
 							if temp == 0 {
-								logger.Log(logger.Fields{"temperature": temp, "serial": d.Serial}).Warn("Unable to get liquid temperature.")
+								logger.Log(logger.Fields{"temperature": temp, "serial": d.Serial}).Warn("Unable to get PSU temperature.")
 							}
 						}
 					case temperatures.SensorTypeMultiGPUs:
@@ -3372,6 +3372,10 @@ func (d *Device) getDeviceData() {
 		return
 	}
 	response = d.read(modeGetTemperatures, dataTypeGetTemperatures, false)
+	if d.Debug {
+		logger.Log(logger.Fields{"serial": d.Serial, "data": fmt.Sprintf("% 2x", response), "type": "temperature"}).Info("getDeviceData()")
+	}
+
 	if response[3] == 0x00 {
 		amount = response[6]
 		sensorData = response[7:]
