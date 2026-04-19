@@ -3383,7 +3383,7 @@ func (d *Device) getDeviceData() {
 		if d.Debug {
 			logger.Log(logger.Fields{"serial": d.Serial, "data": fmt.Sprintf("% 2x", response), "type": "temperature"}).Info("getDeviceData()")
 		}
-		if valid == 0x01 {
+		if valid == 0x00 || valid == 0x01 {
 			for i, s := 0, 0; i < int(amount); i, s = i+1, s+3 {
 				currentSensor := sensorData[s : s+3]
 				status := currentSensor[0]
