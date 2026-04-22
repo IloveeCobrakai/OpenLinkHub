@@ -1379,7 +1379,7 @@ func (d *Device) backendListener() {
 					productId := uint16(data[11])<<8 | uint16(data[10])
 					d.setDeviceStatus(value, productId)
 				} else {
-					if data[1] == 0x02 || data[1] == 0x09 {
+					if data[1] == 0x02 || data[1] == 0x09 || data[1] == 0x05 {
 						switch data[0] {
 						case 1:
 							d.TriggerMousedKeyAssignment(data)
