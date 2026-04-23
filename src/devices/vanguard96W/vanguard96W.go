@@ -155,7 +155,7 @@ var (
 	maxBufferSizePerRequest = 59
 	keyboardKey             = "vanguard96W-default"
 	defaultLayout           = "vanguard96W-default-US"
-	keyAssignmentLength     = 137
+	keyAssignmentLength     = 139
 	transferTimeout         = 500
 	noFlashTapSet           = map[uint16]struct{}{
 		130: {}, 131: {}, 132: {}, 133: {}, 134: {}, 135: {},
