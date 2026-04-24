@@ -67,12 +67,14 @@ $ sudo apt-get install libudev-dev
 $ sudo apt-get install usbutils
 $ sudo apt-get install libpipewire-0.3-dev
 $ sudo apt-get install pkg-config
+$ sudo apt-get install x11-xserver-utils
 
 # Pacotes necessários (rpm)
 $ sudo dnf install libudev-devel
 $ sudo dnf install usbutils
 $ sudo dnf install pipewire-devel
 $ sudo dnf install pkg-config
+$ sudo dnf install xrandr
 ```
 Você também pode usar o devcontainer fornecido para o VScode. Isso é útil para distribuições imutáveis.
 ### 2. Compilar & instalar
@@ -233,6 +235,9 @@ $ docker run --privileged openlinkhub
 
 # Para acesso WebUI, rede é necessária
 $ docker run --network host --privileged openlinkhub
+
+# Macros de posição do rato
+$ docker run --network host -e DISPLAY=$DISPLAY --device /dev/uinput:/dev/uinput --privileged openlinkhub
 ```
 
 ## LCD

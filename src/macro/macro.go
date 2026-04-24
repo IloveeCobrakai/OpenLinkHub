@@ -29,6 +29,9 @@ type Actions struct {
 	ActionRepeat      uint8  `json:"actionRepeat"`
 	ActionRepeatDelay uint16 `json:"actionRepeatDelay"`
 	ActionText        string `json:"actionText"`
+	MouseX            int32  `json:"mouseX"`
+	MouseY            int32  `json:"mouseY"`
+	Relative          bool   `json:"relative"`
 }
 
 type Tracker struct {
@@ -136,7 +139,7 @@ func validatePressAndHold(macroId int) bool {
 }
 
 // UpdateMacroValue will update macro value
-func UpdateMacroValue(macroId, macroIndex int, actionHold bool, actionRepeat uint8, actionRepeatDelay uint16) uint8 {
+func UpdateMacroValue(macroId, macroIndex int, actionHold bool, actionRepeat uint8, actionRepeatDelay uint16, mouseX int32, mouseY int32, relative bool) uint8 {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if val, ok := macros[macroId]; ok {
@@ -150,6 +153,9 @@ func UpdateMacroValue(macroId, macroIndex int, actionHold bool, actionRepeat uin
 			action.ActionHold = actionHold
 			action.ActionRepeat = actionRepeat
 			action.ActionRepeatDelay = actionRepeatDelay
+			action.MouseX = mouseX
+			action.MouseY = mouseY
+			action.Relative = relative
 			val.Actions[macroIndex] = action
 			macros[macroId] = val
 			SaveProfile(profile, val)

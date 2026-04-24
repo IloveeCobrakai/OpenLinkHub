@@ -82,6 +82,7 @@ const (
 	EvKey        uint16 = 1
 	EvSyn        uint16 = 0
 	EvRel        uint16 = 2
+	EvAbs        uint16 = 3
 	EvFf         uint16 = 0x15
 	EvUinput     uint16 = 0x0101
 	FfRumble     uint16 = 0x50
@@ -251,6 +252,7 @@ const (
 	KeyControllerDpadRight  uint16 = 144
 	KeyControllerX          uint16 = 145
 	KeyControllerY          uint16 = 146
+	MousePosition           uint16 = 147
 )
 
 var (
@@ -379,6 +381,7 @@ var (
 	btnRight                uint16 = 0x111
 	btnMiddle               uint16 = 0x112
 	btnForward              uint16 = 0x114
+	btnPosition             uint16 = 0x115
 	btnBack                 uint16 = 0x113
 	keyKp1                  uint16 = 0x4F
 	keyKp2                  uint16 = 0x50
@@ -454,9 +457,11 @@ var (
 	inputActions           map[uint16]InputAction
 	virtualKeyboardPointer uintptr
 	virtualMousePointer    uintptr
+	virtualMouseAbsPointer uintptr
 	virtualGamepadPointer  uintptr
 	virtualKeyboardFile    *os.File
 	virtualMouseFile       *os.File
+	virtualMouseAbsFile    *os.File
 	virtualGamepadFile     *os.File
 	dispatch               dispatcher.DeviceDispatcher
 	running                bool
@@ -465,6 +470,8 @@ var (
 	lastRight              byte
 	rumbleMutex            sync.Mutex
 	rumbleGen              uint64
+	mouseStateX            int32
+	mouseStateY            int32
 )
 
 type inputEvent struct {
@@ -617,6 +624,7 @@ func buildInputActions() {
 	inputActions[BtnMiddle] = InputAction{Name: "(Mouse) Middle Click", CommandCode: btnMiddle, Mouse: true}
 	inputActions[BtnBack] = InputAction{Name: "(Mouse) Back", CommandCode: btnBack, Mouse: true}
 	inputActions[BtnForward] = InputAction{Name: "(Mouse) Forward", CommandCode: btnForward, Mouse: true}
+	inputActions[MousePosition] = InputAction{Name: "(Mouse) Position", CommandCode: btnPosition, Mouse: true}
 
 	// Controller
 	inputActions[KeyControllerSouth] = InputAction{Name: "(Controller) South (A)", CommandCode: btnControllerSouth, Controller: true}
@@ -719,10 +727,19 @@ func CreateVirtualMouse() {
 	if virtualMouseFile == nil {
 		err := createVirtualMouse(vendorId, productId)
 		if err != nil {
-			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual keyboard")
+			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual mouse")
 			return
 		}
 		logger.Log(logger.Fields{}).Info("Virtual mouse successfully created")
+	}
+
+	if virtualMouseAbsFile == nil {
+		err := createVirtualMouseAbs(vendorId, productId)
+		if err != nil {
+			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual absolute mouse")
+			return
+		}
+		logger.Log(logger.Fields{}).Info("Virtual absolute mouse successfully created")
 	}
 }
 

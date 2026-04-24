@@ -98,6 +98,9 @@ type Payload struct {
 	PressAndHold                  bool                  `json:"pressAndHold"`
 	ActionRepeatValue             uint8                 `json:"actionRepeatValue"`
 	ActionRepeatDelay             uint16                `json:"actionRepeatDelay"`
+	MouseXValue                   int32                 `json:"mouseXValue"`
+	MouseYValue                   int32                 `json:"mouseYValue"`
+	Relative                      bool                  `json:"relative"`
 	ToggleDelay                   uint16                `json:"toggleDelay"`
 	KeyIndex                      int                   `json:"keyIndex"`
 	KeyAssignmentType             uint8                 `json:"keyAssignmentType"`
@@ -3693,7 +3696,7 @@ func ProcessUpdateMacroValue(r *http.Request) *Payload {
 		}
 	}
 
-	res := macro.UpdateMacroValue(req.MacroId, req.MacroIndex, req.PressAndHold, req.ActionRepeatValue, req.ActionRepeatDelay)
+	res := macro.UpdateMacroValue(req.MacroId, req.MacroIndex, req.PressAndHold, req.ActionRepeatValue, req.ActionRepeatDelay, req.MouseXValue, req.MouseYValue, req.Relative)
 	switch res {
 	case 0:
 		return &Payload{

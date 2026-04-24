@@ -2333,7 +2333,25 @@ func (d *Device) triggerKeyAssignment(value uint32) {
 						case 1, 3:
 							inputmanager.InputControlKeyboard(v.ActionCommand, v.ActionHold)
 						case 9:
-							inputmanager.InputControlMouse(v.ActionCommand)
+							if v.ActionRepeat > 0 && !v.ActionHold {
+								for z := 0; z < int(v.ActionRepeat); z++ {
+									inputmanager.InputControlMouse(v.ActionCommand)
+									if v.ActionRepeatDelay > 0 && v.ActionRepeat > 1 {
+										time.Sleep(time.Duration(v.ActionRepeatDelay) * time.Millisecond)
+									}
+								}
+							} else if v.ActionHold && v.ActionRepeat == 0 {
+								inputmanager.InputControlMouseHold(v.ActionCommand, v.ActionHold)
+							} else if v.MouseX != 0 || v.MouseY != 0 {
+								if v.Relative {
+									inputmanager.InputControlMove(v.MouseX, v.MouseY)
+								} else {
+									inputmanager.InputControlMoveAbsolute(v.MouseX, v.MouseY)
+								}
+							} else {
+								inputmanager.InputControlMouse(v.ActionCommand)
+							}
+							break
 						case 5:
 							if v.ActionDelay > 0 {
 								time.Sleep(time.Duration(v.ActionDelay) * time.Millisecond)

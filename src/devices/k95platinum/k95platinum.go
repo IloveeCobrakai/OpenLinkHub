@@ -2360,6 +2360,12 @@ func (d *Device) triggerKeyAssignment(value []byte) {
 							}
 						} else if v.ActionHold && v.ActionRepeat == 0 {
 							inputmanager.InputControlMouseHold(v.ActionCommand, v.ActionHold)
+						} else if v.MouseX != 0 || v.MouseY != 0 {
+							if v.Relative {
+								inputmanager.InputControlMove(v.MouseX, v.MouseY)
+							} else {
+								inputmanager.InputControlMoveAbsolute(v.MouseX, v.MouseY)
+							}
 						} else {
 							inputmanager.InputControlMouse(v.ActionCommand)
 						}

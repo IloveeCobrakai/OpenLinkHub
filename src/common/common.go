@@ -5,14 +5,13 @@ package common
 // License: GPL-3.0 or later
 
 import (
+	"bufio"
 	"bytes"
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/sstallion/go-hid"
-	"golang.org/x/image/draw"
 	"image"
 	"image/color"
 	"image/gif"
@@ -26,6 +25,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/sstallion/go-hid"
+	"golang.org/x/image/draw"
 )
 
 type Slipstream struct {
@@ -65,6 +67,16 @@ type KeyboardPerformanceData struct {
 type CurveData struct {
 	X uint8 `json:"x"`
 	Y uint8 `json:"y"`
+}
+
+type Display struct {
+	X, Y          int32
+	Width, Height int32
+}
+
+type ScreenBounds struct {
+	TotalWidth  int32
+	TotalHeight int32
 }
 
 const (
@@ -1024,4 +1036,66 @@ func MaxHIDInputReport(rd []byte) int {
 		return maxSize + 1
 	}
 	return maxSize
+}
+
+// GetScreenBounds Screen bounds
+func GetScreenBounds() ScreenBounds {
+	cmd := exec.Command("xrandr", "--query")
+	out, err := cmd.Output()
+	if err != nil {
+		// fallback
+		return ScreenBounds{TotalWidth: 1920, TotalHeight: 1080}
+	}
+
+	var displays []Display
+
+	scanner := bufio.NewScanner(bytes.NewReader(out))
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		matches := XrandrRegex.FindStringSubmatch(line)
+		if len(matches) != 5 {
+			continue
+		}
+
+		w, _ := strconv.ParseInt(matches[1], 10, 32)
+		h, _ := strconv.ParseInt(matches[2], 10, 32)
+		x, _ := strconv.ParseInt(matches[3], 10, 32)
+		y, _ := strconv.ParseInt(matches[4], 10, 32)
+
+		displays = append(displays, Display{
+			X:      int32(x),
+			Y:      int32(y),
+			Width:  int32(w),
+			Height: int32(h),
+		})
+	}
+
+	if len(displays) == 0 {
+		return ScreenBounds{TotalWidth: 1920, TotalHeight: 1080}
+	}
+
+	minX, minY := displays[0].X, displays[0].Y
+	maxX := displays[0].X + displays[0].Width
+	maxY := displays[0].Y + displays[0].Height
+
+	for _, d := range displays {
+		if d.X < minX {
+			minX = d.X
+		}
+		if d.Y < minY {
+			minY = d.Y
+		}
+		if d.X+d.Width > maxX {
+			maxX = d.X + d.Width
+		}
+		if d.Y+d.Height > maxY {
+			maxY = d.Y + d.Height
+		}
+	}
+
+	return ScreenBounds{
+		TotalWidth:  maxX - minX,
+		TotalHeight: maxY - minY,
+	}
 }

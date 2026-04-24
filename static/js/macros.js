@@ -135,6 +135,9 @@ $(document).ready(function () {
         const pressAndHold = $row.find('.pressAndHold').is(':checked');
         const actionRepeatValue = $row.find('.actionRepeatValue').val();
         const actionRepeatDelayValue = $row.find('.actionRepeatDelayValue').val();
+        const relative = $row.find('.relative').is(':checked');
+        const mouseXValue = $row.find('.mouseXValue').val();
+        const mouseYValue = $row.find('.mouseYValue').val();
 
         if (macro.length !== 2) {
             toast.warning(i18n.t('txtInvalidMacroProfile'));
@@ -146,7 +149,10 @@ $(document).ready(function () {
             macroIndex: parseInt(macro[1]),
             pressAndHold: pressAndHold,
             actionRepeatValue: parseInt(actionRepeatValue),
-            actionRepeatDelay: parseInt(actionRepeatDelayValue)
+            actionRepeatDelay: parseInt(actionRepeatDelayValue),
+            relative: relative,
+            mouseXValue: parseInt(mouseXValue),
+            mouseYValue: parseInt(mouseYValue),
         };
 
         $.ajax({
@@ -175,7 +181,7 @@ $(document).ready(function () {
                     const data = response.data.actions;
                     dt.clear().draw();
                     $("#profile").val(pf);
-                    $.each(data, function(i, item) {
+                    $.each(data, function (i, item) {
                         let actionType = '';
                         switch (item.actionType) {
                             case 1:
@@ -205,8 +211,7 @@ $(document).ready(function () {
                             </label>
                         `;
 
-                        if (item.actionType === 5)
-                        { // 5 is always Delay option
+                        if (item.actionType === 5) { // 5 is always Delay option
                             dt.row.add([
                                 i,
                                 actionType,
@@ -217,9 +222,7 @@ $(document).ready(function () {
                                 '' +
                                 `<input class="system-button danger deleteMacroValue" id="deleteMacroValue" data-id="${pf};${i}" type="button" value="DELETE" style="width: 100%;">`
                             ]).draw();
-                        }
-                    else
-                        if (item.actionType === 6) { // String
+                        } else if (item.actionType === 6) { // String
                             dt.row.add([
                                 i,
                                 actionType,
@@ -242,6 +245,33 @@ $(document).ready(function () {
                                     </div>
                                 </div>`,
                             ]).draw();
+                        } else if (item.actionType === 9 && item.actionCommand === 147) { // Mouse
+                            // Render row if we have actual key
+                            getKeyName(item.actionCommand, function (result) {
+                                dt.row.add([
+                                    i,
+                                    actionType,
+                                    result,
+                                    `<div class="system-input form-check form-switch">
+                                        <input type="checkbox" class="form-check-input relative" id="relativeToggle" ${item.relative === true ? 'checked' : ''}>
+                                        <label class="form-check-label" for="relativeToggle">Relativ</label>
+                                    </div>`,
+                                    `<div class="system-input input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">X</span>
+                                        <input type="text" class="form-control mouseXValue" value="${item.mouseX}" placeholder="Mouse X">
+                                    </div>`,
+                                    `<div class="system-input input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">Y</span>
+                                        <input type="text" class="form-control mouseYValue" value="${item.mouseY}" placeholder="Mouse Y">
+                                    </div>`,
+                                    `<div class="settings-list">
+                                        <div class="settings-row">
+                                            <input class="system-button secondary updateMacroValue auto-width" id="updateMacroValue" data-id="${pf};${i}" type="button" value="${i18n.t('txtUpdate')}">
+                                            <input class="system-button danger deleteMacroValue auto-width" id="deleteMacroValue" data-id="${pf};${i}" type="button" value="${i18n.t('txtDelete')}">
+                                        </div>
+                                    </div>`,
+                                ]).draw();
+                            });
                         } else {
                             // Render row if we have actual key
                             getKeyName(item.actionCommand, function (result) {
@@ -373,7 +403,7 @@ $(document).ready(function () {
             type: 'DELETE',
             data: json,
             cache: false,
-            success: function (response) {
+            success: function(response) {
                 try {
                     if (response.status === 1) {
                         location.reload();
@@ -422,7 +452,7 @@ $(document).ready(function () {
             type: 'POST',
             data: json,
             cache: false,
-            success: function (response) {
+            success: function(response) {
                 try {
                     if (response.status === 1) {
                         //location.reload();
@@ -508,7 +538,7 @@ $(document).ready(function () {
             url: '/api/macro/keyInfo/' + parseInt(keyIndex),
             type: 'GET',
             cache: false,
-            success: function (response) {
+            success: function(response) {
                 if (response.status === 1) {
                     callback(response.data);
                 } else {

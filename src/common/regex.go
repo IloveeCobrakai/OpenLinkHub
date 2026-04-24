@@ -17,4 +17,5 @@ var (
 	AlphanumericUnderDashPath = regexp.MustCompile(`^[a-zA-Z0-9_\-/]+$`)
 	AlphanumericUnderColon    = regexp.MustCompile(`^[a-zA-Z0-9_:-]+$`)
 	AlphanumericDisplayName   = regexp.MustCompile(`^[a-zA-Z0-9#.:_ -]*$`)
+	XrandrRegex               = regexp.MustCompile(`(\d+)x(\d+)\+(-?\d+)\+(-?\d+)`)
 )
