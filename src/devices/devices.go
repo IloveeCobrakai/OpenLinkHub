@@ -118,6 +118,7 @@ import (
 	"OpenLinkHub/src/devices/virtuosomaxdongle"
 	"OpenLinkHub/src/devices/virtuosorgbXTWU"
 	"OpenLinkHub/src/devices/voidV2dongle"
+	"OpenLinkHub/src/devices/voidelitedongle"
 	"OpenLinkHub/src/devices/xc7"
 	"OpenLinkHub/src/dispatcher"
 	"OpenLinkHub/src/inputmanager"
@@ -824,6 +825,7 @@ var deviceRegisterMap = map[uint16]Product{
 	2628:  {3, 0, "HEADSET DONGLE", nil, headsetdongle.Init},               // Headset dongle
 	2626:  {3, 0, "HEADSET DONGLE", nil, headsetdongle.Init},               // Headset dongle
 	2675:  {3, 0, "HEADSET DONGLE", nil, headsetdongle.Init},               // Headset dongle
+	2641:  {3, 0, "VOID ELITE WIRELESS", nil, voidelitedongle.Init},        // Headset dongle
 	2622:  {3, 65346, "HEADSET DONGLE", nil, headsetdongle.Init},           // Headset dongle
 	2624:  {3, 65346, "HEADSET DONGLE", nil, headsetdongle.Init},           // Headset dongle
 	11015: {1, 0, "K65 PLUS WIRELESS", nil, k65plusWdongle.Init},           // K65 PLUS WIRELESS
