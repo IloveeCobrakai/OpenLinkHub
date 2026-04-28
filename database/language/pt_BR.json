@@ -622,6 +622,9 @@
     "txtUploadImage": "Enviar imagem",
     "txtLiveRgbSync": "RGB em tempo real",
     "txtSensorMultiGpus": "Utiliza múltiplas GPUs como fonte de temperatura, prevalecendo o valor mais alto. Pode ser aplicado a qualquer dispositivo.",
-    "txtMiddleColor": "Cor intermediária"
+    "txtMiddleColor": "Cor intermediária",
+    "txtDisplay": "Tela",
+    "txtUnableToUpdateDisplay": "Não é possível atualizar os dados da tela",
+    "txtDisplayUpdated": "Os dados da tela foram atualizados com sucesso"
   }
 }

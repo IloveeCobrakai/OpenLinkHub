@@ -12,6 +12,7 @@ Buildfile
 config.json
 stdout.log
 dashboard.json
+display.json
 database/temperatures/*.json
 database/profiles/*.json
 database/rgb/*.json

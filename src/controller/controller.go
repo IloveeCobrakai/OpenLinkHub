@@ -10,6 +10,7 @@ import (
 	"OpenLinkHub/src/dashboard"
 	"OpenLinkHub/src/devices"
 	"OpenLinkHub/src/devices/lcd"
+	"OpenLinkHub/src/display"
 	"OpenLinkHub/src/inputmanager"
 	"OpenLinkHub/src/keyboards"
 	"OpenLinkHub/src/language"
@@ -32,6 +33,7 @@ func Start() {
 	version.Init()      // Build info
 	config.Init()       // Configuration
 	logger.Init()       // Logger
+	display.Init()      // Displays
 	audio.Init()        // Audio
 	dashboard.Init()    // Dashboard
 	systeminfo.Init()   // Build system info

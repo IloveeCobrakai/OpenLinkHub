@@ -47,6 +47,7 @@ type Web struct {
 	Stats             interface{}
 	AudioSettings     interface{}
 	OutputDevices     interface{}
+	Displays          interface{}
 	CpuTemp           string
 	GpuTemp           string
 	Page              string

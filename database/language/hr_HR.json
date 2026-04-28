@@ -622,6 +622,9 @@
     "txtUploadImage": "Prenesi sliku",
     "txtLiveRgbSync": "RGB uživo",
     "txtSensorMultiGpus": "Koristi više GPU-ova kao izvor temperature, pri čemu se koristi veća vrijednost. Može se primijeniti na bilo koji uređaj.",
-    "txtMiddleColor": "Srednja boja"
+    "txtMiddleColor": "Srednja boja",
+    "txtDisplay": "Zaslon",
+    "txtUnableToUpdateDisplay": "Nije moguće ažurirati podatke zaslona",
+    "txtDisplayUpdated": "Podaci zaslona su uspješno ažurirani"
   }
 }

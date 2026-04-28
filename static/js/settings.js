@@ -218,6 +218,53 @@ $(document).ready(function () {
         });
     });
 
+    $('.updateDisplay').on('click', function () {
+        const index = $(this).data('info');
+
+        const width = parseInt($('.displayWidth_' + index).val());
+        const height = parseInt($('.displayHeight_' + index).val());
+        const position = parseInt($('.displayPosition_' + index).val());
+
+        if (Number.isNaN(width) || width <= 0) {
+            toastr.warning('Invalid display width');
+            return;
+        }
+
+        if (Number.isNaN(height) || height <= 0) {
+            toastr.warning('Invalid display height');
+            return;
+        }
+
+        const left = position === 1;
+        const top = position === 2;
+
+        const pf = {};
+        pf["displayIndex"] = index;
+        pf["displayWidth"] = width;
+        pf["displayHeight"] = height;
+        pf["displayLeft"] = left;
+        pf["displayTop"] = top;
+        const json = JSON.stringify(pf, null, 2);
+
+        $.ajax({
+            url: '/api/display/update',
+            type: 'POST',
+            dataType: 'json',
+            data: json,
+            cache: false,
+            success: function (response) {
+                if (response.status === 1) {
+                    toast.success(response.message);
+                } else {
+                    toastr.error(response.message || 'Unable to update display');
+                }
+            },
+            error: function () {
+                toastr.error('Unable to update display');
+            }
+        });
+    });
+
     $('.setTargetDevice').on('click', function () {
         const outputDevice = $("#outputDevice").val();
         const data = outputDevice.split(";");

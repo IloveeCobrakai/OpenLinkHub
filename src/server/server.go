@@ -12,6 +12,7 @@ import (
 	"OpenLinkHub/src/dashboard"
 	"OpenLinkHub/src/devices"
 	"OpenLinkHub/src/devices/lcd"
+	"OpenLinkHub/src/display"
 	"OpenLinkHub/src/inputmanager"
 	"OpenLinkHub/src/language"
 	"OpenLinkHub/src/logger"
@@ -1895,6 +1896,17 @@ func getChannelData(w http.ResponseWriter, r *http.Request) {
 	resp.Send(w)
 }
 
+// updateDisplayData handles update of display values
+func updateDisplayData(w http.ResponseWriter, r *http.Request) {
+	request := requests.ProcessUpdateDisplayData(r)
+	resp := &Response{
+		Code:    request.Code,
+		Status:  request.Status,
+		Message: request.Message,
+	}
+	resp.Send(w)
+}
+
 // uiDeviceOverview handles device overview
 func uiDeviceOverview(w http.ResponseWriter, r *http.Request) {
 	deviceId, valid := getVar("/device/", r)
@@ -2253,6 +2265,7 @@ func uiSettings(w http.ResponseWriter, _ *http.Request) {
 	web.Dashboard = dashboard.GetDashboard()
 	web.CpuTemp = dashboard.GetDashboard().TemperatureToString(temperatures.GetCpuTemperature())
 	web.GpuTemp = dashboard.GetDashboard().TemperatureToString(temperatures.GetGpuTemperature())
+	web.Displays = display.GetDisplays()
 	web.AudioSettings = audio.GetAudio()
 	web.OutputDevices = audio.GetSinks()
 	web.SystemService = config.IsSystemService()
@@ -2483,6 +2496,7 @@ func setRoutes() http.Handler {
 	handleFunc(r, "/api/audio/update", http.MethodPost, setAudioSettings)
 	handleFunc(r, "/api/audio/outputDevice", http.MethodPost, setAudioOutputDeviceSettings)
 	handleFunc(r, "/api/devices/channel", http.MethodPost, getChannelData)
+	handleFunc(r, "/api/display/update", http.MethodPost, updateDisplayData)
 
 	// PUT
 	handleFunc(r, "/api/temperatures/update", http.MethodPut, updateTemperatureProfile)

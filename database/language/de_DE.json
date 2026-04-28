@@ -622,6 +622,9 @@
     "txtUploadImage": "Bild hochladen",
     "txtLiveRgbSync": "Live-RGB",
     "txtSensorMultiGpus": "Verwendet mehrere GPUs als Temperaturquelle, der höhere Wert wird verwendet. Kann auf jedes Gerät angewendet werden.",
-    "txtMiddleColor": "Mittlere Farbe"
+    "txtMiddleColor": "Mittlere Farbe",
+    "txtDisplay": "Anzeige",
+    "txtUnableToUpdateDisplay": "Anzeigedaten konnten nicht aktualisiert werden",
+    "txtDisplayUpdated": "Anzeigedaten wurden erfolgreich aktualisiert"
   }
 }

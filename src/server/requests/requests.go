@@ -11,6 +11,7 @@ import (
 	"OpenLinkHub/src/dashboard"
 	"OpenLinkHub/src/devices"
 	"OpenLinkHub/src/devices/lcd"
+	"OpenLinkHub/src/display"
 	"OpenLinkHub/src/inputmanager"
 	"OpenLinkHub/src/keyboards"
 	"OpenLinkHub/src/language"
@@ -178,6 +179,11 @@ type Payload struct {
 	RgbMinTemp                    float64               `json:"rgbMinTemp"`
 	RgbMaxTemp                    float64               `json:"rgbMaxTemp"`
 	ProbeChannelId                int                   `json:"probeChannelId"`
+	DisplayIndex                  int                   `json:"displayIndex"`
+	DisplayWidth                  int                   `json:"displayWidth"`
+	DisplayHeight                 int                   `json:"displayHeight"`
+	DisplayLeft                   bool                  `json:"displayLeft"`
+	DisplayTop                    bool                  `json:"displayTop"`
 	Status                        int
 	Code                          int
 	Message                       string
@@ -5107,4 +5113,60 @@ func ProcessUpdateDeviceEqualizer(r *http.Request) *Payload {
 		}
 	}
 	return &Payload{Message: language.GetValue("txtUnableToUpdateEqualizer"), Code: http.StatusOK, Status: 0}
+}
+
+// ProcessUpdateDisplayData will process update of macro profile value
+func ProcessUpdateDisplayData(r *http.Request) *Payload {
+	req := &Payload{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		logger.Log(map[string]interface{}{"error": err}).Error("Unable to decode JSON")
+		return &Payload{
+			Message: language.GetValue("txtUnableToValidateRequest"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	if req.DisplayIndex < 1 {
+		return &Payload{
+			Message: language.GetValue("txtUnableToValidateRequest"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	if req.DisplayWidth < 1 {
+		return &Payload{
+			Message: language.GetValue("txtUnableToValidateRequest"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	if req.DisplayHeight < 1 {
+		return &Payload{
+			Message: language.GetValue("txtUnableToValidateRequest"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	val := &common.Display{
+		Index:  req.DisplayIndex,
+		Width:  req.DisplayWidth,
+		Height: req.DisplayHeight,
+		Top:    req.DisplayTop,
+		Left:   req.DisplayLeft,
+	}
+
+	res := display.UpdateDisplay(val)
+	switch res {
+	case 0:
+		return &Payload{Message: language.GetValue("txtUnableToUpdateDisplay"), Code: http.StatusOK, Status: 0}
+	case 1:
+		return &Payload{Message: language.GetValue("txtDisplayUpdated"), Code: http.StatusOK, Status: 1}
+	default:
+		return &Payload{Message: language.GetValue("txtUnableToUpdateDisplay"), Code: http.StatusOK, Status: 0}
+	}
 }

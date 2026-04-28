@@ -622,6 +622,9 @@
     "txtUploadImage": "Ladda upp bild",
     "txtLiveRgbSync": "Live RGB",
     "txtSensorMultiGpus": "Använder flera GPU:er som temperaturkälla, det högsta värdet används. Kan tillämpas på alla enheter.",
-    "txtMiddleColor": "Mellanfärg"
+    "txtMiddleColor": "Mellanfärg",
+    "txtDisplay": "Display",
+    "txtUnableToUpdateDisplay": "Det går inte att uppdatera displaydata",
+    "txtDisplayUpdated": "Displaydata har uppdaterats"
   }
 }

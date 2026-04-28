@@ -28,6 +28,15 @@ import (
 	"time"
 )
 
+type Display struct {
+	Index  int
+	Name   string
+	Width  int
+	Height int
+	Left   bool
+	Top    bool
+}
+
 type Slipstream struct {
 	Dev       *hid.Device
 	Listener  *hid.Device
