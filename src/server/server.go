@@ -17,6 +17,7 @@ import (
 	"OpenLinkHub/src/language"
 	"OpenLinkHub/src/logger"
 	"OpenLinkHub/src/macro"
+	"OpenLinkHub/src/media"
 	"OpenLinkHub/src/metrics"
 	"OpenLinkHub/src/rgb"
 	"OpenLinkHub/src/scheduler"
@@ -803,6 +804,20 @@ func getMouseDevice(w http.ResponseWriter, _ *http.Request) {
 		Code:   http.StatusOK,
 		Status: 1,
 		Data:   devices.GetMouse(),
+	}
+	resp.Send(w)
+}
+
+// getMediaPlayback will return active media playback
+func getMediaPlayback(w http.ResponseWriter, _ *http.Request) {
+	resp := &Response{Code: http.StatusOK, Status: 0}
+
+	player, err := media.GetCurrentlyPlaying()
+	if err != nil {
+		resp.Data = err.Error()
+	} else {
+		resp.Data = player
+		resp.Status = 1
 	}
 	resp.Send(w)
 }
@@ -2400,6 +2415,7 @@ func setRoutes() http.Handler {
 	handleFunc(r, "/api/language/", http.MethodGet, getLanguageData)
 	handleFunc(r, "/api/devices/probes/", http.MethodGet, getTemperatureProbes)
 	handleFunc(r, "/api/devices/mouse", http.MethodGet, getMouseDevice)
+	handleFunc(r, "/api/media/playback", http.MethodGet, getMediaPlayback)
 
 	// POST
 	handleFunc(r, "/api/temperatures/new", http.MethodPost, newTemperatureProfile)
