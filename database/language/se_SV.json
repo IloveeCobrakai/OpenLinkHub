@@ -625,6 +625,11 @@
     "txtMiddleColor": "Mellanfärg",
     "txtDisplay": "Display",
     "txtUnableToUpdateDisplay": "Det går inte att uppdatera displaydata",
-    "txtDisplayUpdated": "Displaydata har uppdaterats"
+    "txtDisplayUpdated": "Displaydata har uppdaterats",
+    "txtMousePosition": "Musposition",
+    "txtAbsolute": "Absolut",
+    "txtMousePositionX": "Musposition X",
+    "txtMousePositionY": "Musposition Y",
+    "txtInvalidMousePosition": "Ogiltig musposition"
   }
 }

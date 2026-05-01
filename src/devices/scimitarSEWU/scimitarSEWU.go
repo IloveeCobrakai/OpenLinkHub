@@ -123,6 +123,8 @@ type Device struct {
 	MaxDPI                   int
 	ZoneAmount               int
 	DPIAmount                int
+	stopRepeat               chan struct{}
+	stopRepeatMutex          sync.Mutex
 }
 
 var (
@@ -2642,6 +2644,41 @@ func (d *Device) triggerKeyAssignment(value uint32) {
 								}
 							} else {
 								inputmanager.InputControlKeyboardText(v.ActionText)
+							}
+						case 20:
+							if v.ActionRepeat > 0 && !v.ActionHold {
+								d.stopRepeatMutex.Lock()
+								if d.stopRepeat != nil {
+									close(d.stopRepeat)
+								}
+
+								d.stopRepeat = make(chan struct{})
+								localStop := d.stopRepeat
+								d.stopRepeatMutex.Unlock()
+
+								go func() {
+									for z := 0; z < int(v.ActionRepeat); z++ {
+										select {
+										case <-localStop:
+											return
+										default:
+											if v.MousePositionAbsolute {
+												inputmanager.InputControlMoveAbsolute(int32(v.MousePositionX), int32(v.MousePositionY))
+											} else {
+												inputmanager.InputControlMove(int32(v.MousePositionX), int32(v.MousePositionY))
+											}
+										}
+										if v.ActionRepeatDelay > 0 && v.ActionRepeat > 1 {
+											time.Sleep(time.Duration(v.ActionRepeatDelay) * time.Millisecond)
+										}
+									}
+								}()
+							} else {
+								if v.MousePositionAbsolute {
+									inputmanager.InputControlMoveAbsolute(int32(v.MousePositionX), int32(v.MousePositionY))
+								} else {
+									inputmanager.InputControlMove(int32(v.MousePositionX), int32(v.MousePositionY))
+								}
 							}
 						}
 					}

@@ -625,6 +625,11 @@
         "txtMiddleColor": "Couleur intermédiaire",
         "txtDisplay": "Affichage",
         "txtUnableToUpdateDisplay": "Impossible de mettre à jour les données d’affichage",
-        "txtDisplayUpdated": "Les données d’affichage ont été mises à jour avec succès"
+        "txtDisplayUpdated": "Les données d’affichage ont été mises à jour avec succès",
+        "txtMousePosition": "Position de la souris",
+        "txtAbsolute": "Absolu",
+        "txtMousePositionX": "Position de la souris X",
+        "txtMousePositionY": "Position de la souris Y",
+        "txtInvalidMousePosition": "Position de la souris non valide"
     }
 }

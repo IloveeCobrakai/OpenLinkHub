@@ -184,6 +184,9 @@ type Payload struct {
 	DisplayHeight                 int                   `json:"displayHeight"`
 	DisplayLeft                   bool                  `json:"displayLeft"`
 	DisplayTop                    bool                  `json:"displayTop"`
+	MousePositionX                int                   `json:"mousePositionX"`
+	MousePositionY                int                   `json:"mousePositionY"`
+	MousePositionAbsolute         bool                  `json:"mousePositionAbsolute"`
 	Status                        int
 	Code                          int
 	Message                       string
@@ -3699,7 +3702,33 @@ func ProcessUpdateMacroValue(r *http.Request) *Payload {
 		}
 	}
 
-	res := macro.UpdateMacroValue(req.MacroId, req.MacroIndex, req.PressAndHold, req.ActionRepeatValue, req.ActionRepeatDelay)
+	if req.MousePositionX < 0 || req.MousePositionY < 0 {
+		return &Payload{
+			Message: language.GetValue("txtInvalidMousePosition"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	resolution := display.GetScreenResolution()
+	if req.MousePositionX > resolution.Width || req.MousePositionY > resolution.Height {
+		return &Payload{
+			Message: language.GetValue("txtInvalidMousePosition"),
+			Code:    http.StatusOK,
+			Status:  0,
+		}
+	}
+
+	macroAction := &macro.Actions{
+		ActionHold:            req.PressAndHold,
+		ActionRepeat:          req.ActionRepeatValue,
+		ActionRepeatDelay:     req.ActionRepeatDelay,
+		MousePositionX:        req.MousePositionX,
+		MousePositionY:        req.MousePositionY,
+		MousePositionAbsolute: req.MousePositionAbsolute,
+	}
+
+	res := macro.UpdateMacroValue(req.MacroId, req.MacroIndex, macroAction)
 	switch res {
 	case 0:
 		return &Payload{
@@ -3821,6 +3850,9 @@ func ProcessNewMacroProfileValue(r *http.Request) *Payload {
 			Status:  0,
 		}
 	}
+	mousePositionX := 0
+	mousePositionY := 0
+	mousePositionAbsolute := false
 
 	macroId := req.MacroId
 	macroType := req.MacroType
@@ -3844,7 +3876,7 @@ func ProcessNewMacroProfileValue(r *http.Request) *Payload {
 		}
 	}
 
-	if macroType < 3 || macroType > 9 {
+	if macroType < 3 || macroType > 20 {
 		return &Payload{
 			Message: language.GetValue("txtInvalidMacroType"),
 			Code:    http.StatusOK,
@@ -3876,7 +3908,40 @@ func ProcessNewMacroProfileValue(r *http.Request) *Payload {
 		}
 	}
 
-	res := macro.NewMacroProfileValue(macroId, macroType, macroValue, macroDelay, macroText)
+	if macroType == 20 {
+		mousePositionX = req.MousePositionX
+		mousePositionY = req.MousePositionY
+		mousePositionAbsolute = req.MousePositionAbsolute
+
+		if mousePositionX < 0 || mousePositionY < 0 {
+			return &Payload{
+				Message: language.GetValue("txtInvalidMousePosition"),
+				Code:    http.StatusOK,
+				Status:  0,
+			}
+		}
+
+		resolution := display.GetScreenResolution()
+		if req.MousePositionX > resolution.Width || req.MousePositionY > resolution.Height {
+			return &Payload{
+				Message: language.GetValue("txtInvalidMousePosition"),
+				Code:    http.StatusOK,
+				Status:  0,
+			}
+		}
+	}
+
+	macroAction := &macro.Actions{
+		ActionType:            macroType,
+		ActionCommand:         macroValue,
+		ActionDelay:           macroDelay,
+		ActionText:            macroText,
+		MousePositionX:        mousePositionX,
+		MousePositionY:        mousePositionY,
+		MousePositionAbsolute: mousePositionAbsolute,
+	}
+
+	res := macro.NewMacroProfileValue(macroId, macroAction)
 	if res == 1 {
 		return &Payload{
 			Message: language.GetValue("txtMacroProfileValueSaved"),

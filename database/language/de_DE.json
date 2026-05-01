@@ -625,6 +625,11 @@
     "txtMiddleColor": "Mittlere Farbe",
     "txtDisplay": "Anzeige",
     "txtUnableToUpdateDisplay": "Anzeigedaten konnten nicht aktualisiert werden",
-    "txtDisplayUpdated": "Anzeigedaten wurden erfolgreich aktualisiert"
+    "txtDisplayUpdated": "Anzeigedaten wurden erfolgreich aktualisiert",
+    "txtMousePosition": "Mausposition",
+    "txtAbsolute": "Absolut",
+    "txtMousePositionX": "Mausposition X",
+    "txtMousePositionY": "Mausposition Y",
+    "txtInvalidMousePosition": "Ungültige Mausposition"
   }
 }

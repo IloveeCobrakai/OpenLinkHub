@@ -7,6 +7,7 @@ package inputmanager
 import (
 	"OpenLinkHub/src/config"
 	"OpenLinkHub/src/dispatcher"
+	"OpenLinkHub/src/display"
 	"OpenLinkHub/src/logger"
 	"encoding/binary"
 	"errors"
@@ -82,6 +83,7 @@ const (
 	EvKey        uint16 = 1
 	EvSyn        uint16 = 0
 	EvRel        uint16 = 2
+	EvAbs        uint16 = 3
 	EvFf         uint16 = 0x15
 	EvUinput     uint16 = 0x0101
 	FfRumble     uint16 = 0x50
@@ -99,6 +101,7 @@ const (
 	iocWrite            = 1
 	iocRead             = 2
 	fallbackMs          = 1500
+	AbsMin              = 0
 )
 
 const (
@@ -454,9 +457,11 @@ var (
 	inputActions           map[uint16]InputAction
 	virtualKeyboardPointer uintptr
 	virtualMousePointer    uintptr
+	virtualMouseAbsPointer uintptr
 	virtualGamepadPointer  uintptr
 	virtualKeyboardFile    *os.File
 	virtualMouseFile       *os.File
+	virtualMouseAbsFile    *os.File
 	virtualGamepadFile     *os.File
 	dispatch               dispatcher.DeviceDispatcher
 	running                bool
@@ -465,6 +470,8 @@ var (
 	lastRight              byte
 	rumbleMutex            sync.Mutex
 	rumbleGen              uint64
+	screenWidth            int32
+	screenHeight           int32
 )
 
 type inputEvent struct {
@@ -697,6 +704,8 @@ var shiftedToBase = map[rune]rune{
 
 // Init will fetch an input device
 func Init() {
+	screenWidth = int32(display.GetScreenResolution().Width)
+	screenHeight = int32(display.GetScreenResolution().Height)
 	buildInputActions()
 	CreateVirtualKeyboard()
 	CreateVirtualMouse()
@@ -719,10 +728,19 @@ func CreateVirtualMouse() {
 	if virtualMouseFile == nil {
 		err := createVirtualMouse(vendorId, productId)
 		if err != nil {
-			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual keyboard")
+			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual mouse")
 			return
 		}
 		logger.Log(logger.Fields{}).Info("Virtual mouse successfully created")
+	}
+
+	if virtualMouseAbsFile == nil {
+		err := createVirtualMouseAbs(vendorId, productId)
+		if err != nil {
+			logger.Log(logger.Fields{"error": err}).Error("Failed to create virtual absolute mouse")
+			return
+		}
+		logger.Log(logger.Fields{}).Info("Virtual absolute mouse successfully created")
 	}
 }
 

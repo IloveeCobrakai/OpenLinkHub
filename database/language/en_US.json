@@ -625,6 +625,11 @@
     "txtMiddleColor": "Middle Color",
     "txtDisplay": "Display",
     "txtUnableToUpdateDisplay": "Unable to update display data",
-    "txtDisplayUpdated": "Display data is successfully updated"
+    "txtDisplayUpdated": "Display data is successfully updated",
+    "txtMousePosition": "Mouse Position",
+    "txtAbsolute": "Absolute",
+    "txtMousePositionX": "Mouse position X",
+    "txtMousePositionY": "Mouse position Y",
+    "txtInvalidMousePosition": "Invalid mouse position"
   }
 }

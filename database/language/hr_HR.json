@@ -625,6 +625,11 @@
     "txtMiddleColor": "Srednja boja",
     "txtDisplay": "Zaslon",
     "txtUnableToUpdateDisplay": "Nije moguće ažurirati podatke zaslona",
-    "txtDisplayUpdated": "Podaci zaslona su uspješno ažurirani"
+    "txtDisplayUpdated": "Podaci zaslona su uspješno ažurirani",
+    "txtMousePosition": "Pozicija miša",
+    "txtAbsolute": "Apsolutno",
+    "txtMousePositionX": "Pozicija miša X",
+    "txtMousePositionY": "Pozicija miša Y",
+    "txtInvalidMousePosition": "Nevažeća pozicija miša"
   }
 }

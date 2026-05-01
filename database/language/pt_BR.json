@@ -625,6 +625,11 @@
     "txtMiddleColor": "Cor intermediária",
     "txtDisplay": "Tela",
     "txtUnableToUpdateDisplay": "Não é possível atualizar os dados da tela",
-    "txtDisplayUpdated": "Os dados da tela foram atualizados com sucesso"
+    "txtDisplayUpdated": "Os dados da tela foram atualizados com sucesso",
+    "txtMousePosition": "Posição do mouse",
+    "txtAbsolute": "Absoluto",
+    "txtMousePositionX": "Posição do mouse X",
+    "txtMousePositionY": "Posição do mouse Y",
+    "txtInvalidMousePosition": "Posição do mouse inválida"
   }
 }

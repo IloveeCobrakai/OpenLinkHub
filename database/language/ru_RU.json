@@ -625,6 +625,11 @@
         "txtMiddleColor": "Средний цвет",
         "txtDisplay": "Дисплей",
         "txtUnableToUpdateDisplay": "Невозможно обновить данные дисплея",
-        "txtDisplayUpdated": "Данные дисплея успешно обновлены"
+        "txtDisplayUpdated": "Данные дисплея успешно обновлены",
+        "txtMousePosition": "Положение мыши",
+        "txtAbsolute": "Абсолютное",
+        "txtMousePositionX": "Положение мыши X",
+        "txtMousePositionY": "Положение мыши Y",
+        "txtInvalidMousePosition": "Недопустимое положение мыши"
     }
 }
