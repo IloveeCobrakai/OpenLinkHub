@@ -1,5 +1,25 @@
+## 2026-05-01
+
+* mouse position https://github.com/jurkovic-nikola/OpenLinkHub/issues/411 (a6da393)
+* controller update (1ca7fd9)
+* mpris dbus client (4c8efc6)
+
+## 2026-04-28
+
+* missing info (0639edb)
+* initial display detection and settings (e3def7f)
+* void elite wireless https://github.com/jurkovic-nikola/OpenLinkHub/issues/405 (bf23af3)
+
+## 2026-04-23
+
+* k70 core tkl wireless de layout, wireless color packet length (0fba02c)
+* vangaurd 96 wireless key assignment length (c07826d)
+* Merge pull request #409 from IloveeCobrakai/issue-408 (868d684)
+* fix: prevent macro ID collision when deleting entries (a6b5441)
+
 ## 2026-04-22
 
+* changelog (d94f607)
 * vanguard 96 wireless (b575e01)
 * missing knob parsing (6d87c71)
 * more dpi stepping (2964665)
