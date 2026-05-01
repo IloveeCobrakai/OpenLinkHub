@@ -158,8 +158,15 @@ var (
 	BufferSize                 = 64
 	deviceRefreshInterval      = 1000
 	temperaturePullingInterval = 3000
-	rgbProfileUpgrade          = []string{"gradient", "pastelrainbow", "pastelspiralrainbow"}
-	rgbModes                   = []string{
+	rgbProfileUpgrade          = []string{
+		"arc",
+		"gradient",
+		"pastelrainbow",
+		"pastelspiralrainbow",
+		"rain",
+	}
+	rgbModes = []string{
+		"arc",
 		"circle",
 		"colorpulse",
 		"colorshift",
@@ -169,6 +176,7 @@ var (
 		"gradient",
 		"liquid-temperature",
 		"off",
+		"rain",
 		"rainbow",
 		"pastelrainbow",
 		"rotator",
@@ -972,6 +980,16 @@ func (d *Device) setDeviceColor() {
 					case "pastelrainbow":
 						{
 							r.PastelRainbow(startTime)
+							buff = append(buff, r.Output...)
+						}
+					case "arc":
+						{
+							r.Arc(startTime)
+							buff = append(buff, r.Output...)
+						}
+					case "rain":
+						{
+							r.Rain(startTime)
 							buff = append(buff, r.Output...)
 						}
 					case "watercolor":
